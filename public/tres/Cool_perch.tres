@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="fish_data_resource" load_steps=6 format=4 uid="uid://cgb5u5naom7h4"]
+
+[ext_resource type="Texture2D" uid="uid://bi6ajq2iy6oxh" path="res://Module/Inventory/Item_icons/cool_perch_icon.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://b01xaoh33kua1" path="res://Module/Fishes/Fish_Resource/All_fish/Cool_perch/cool_perch_model.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cfwyrtdh2s6bc" path="res://Module/Fishes/Fish_Resource/All_fish/Cool_perch/cool_perch.tscn" id="3"]
+[ext_resource type="AudioStream" uid="uid://ckfwtbneykvq5" path="res://Module/Fishes/Fish_Resource/All_fish/Cool_perch/chart_data/simple_fish.ogg" id="4"]
+[ext_resource type="Script" uid="uid://dy62imrgxvc0v" path="res://Module/Fishes/Fish_Resource/Logic/fish_data_resource.gd" id="5"]
+
+[resource]
+script = ExtResource("5")
+fish_scene = ExtResource("3")
+ID = "cool_perch"
+fish_name = "Cool perch"
+fish_author = "Chavafei"
+difficulty = 2
+fish_type = 1
+fish_element = []
+fish_description = "a fish that likes to be in a cool pool, cold to touch."
+found_location = "Lake - Park pool (cool)"
+main_location = "Lake"
+song_name = "cooling start"
+bpm = 150
+music_file = ExtResource("4")
+fishchart_file = "res://Module/Fishes/Fish_Resource/All_fish/Cool_perch/chart_data/fish_simple_level.fishchart"
+compliment_notes = []
+compliment_notes_arrays = []
+tension_natural_multiplier = 1.0
+fish_model = ExtResource("2")
+fish_icon = ExtResource("1")
+fish_record_camera_pos = Vector3(1.1, 0, 0)
+player_holding_position = Vector3(0, 0, 0.05)
+player_holding_rotation = Vector3(-20, 90, 0)
+fish_card_spin_duration = 5.0
+total_rare_visual_random = false
+rare_color_hsv = Vector3(1.3, 1, 1)
+base_worth = 95.0

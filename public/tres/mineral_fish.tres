@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="fish_data_resource" load_steps=6 format=4 uid="uid://btsx0px3mja06"]
+
+[ext_resource type="Texture2D" uid="uid://k68r5qoe8yxd" path="res://Module/Inventory/Item_icons/fishes/mineral_fish.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://p6evyjcyww0l" path="res://Module/Fishes/Fish_Resource/All_fish/Mineral_fish/mineral_fish_model.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://d0hkqtdcfsq3b" path="res://Module/Fishes/Fish_Resource/All_fish/Mineral_fish/mineral_fish.tscn" id="3"]
+[ext_resource type="AudioStream" uid="uid://clv2rtnb5xaa3" path="res://Module/Fishes/Fish_Resource/All_fish/Mineral_fish/chart_data/mineral_fish.ogg" id="4"]
+[ext_resource type="Script" uid="uid://dy62imrgxvc0v" path="res://Module/Fishes/Fish_Resource/Logic/fish_data_resource.gd" id="5"]
+
+[resource]
+script = ExtResource("5")
+fish_scene = ExtResource("3")
+ID = "mineral_fish"
+fish_name = "Crystal fish"
+fish_author = "Chavafei"
+difficulty = 4
+fish_type = 1
+fish_element = []
+fish_description = "A golem fish made out of mineral rocks. It's like a regular golem fish but also has some minerals on its body. Its shiny crystals can be blinding."
+found_location = "Lake - Fish park cave"
+main_location = "Lake"
+song_name = "Sparkling liquid"
+bpm = 155
+music_file = ExtResource("4")
+fishchart_file = "res://Module/Fishes/Fish_Resource/All_fish/Mineral_fish/chart_data/mineral_fish.fishchart"
+compliment_notes = []
+compliment_notes_arrays = []
+tension_natural_multiplier = 1.0
+fish_model = ExtResource("2")
+fish_icon = ExtResource("1")
+fish_record_camera_pos = Vector3(1.1, 0, 0)
+player_holding_position = Vector3(0, 0, 0.05)
+player_holding_rotation = Vector3(-20, 90, 0)
+total_rare_visual_random = false
+rare_color_hsv = Vector3(1.3, 0.5, 1)
+base_worth = 120.0

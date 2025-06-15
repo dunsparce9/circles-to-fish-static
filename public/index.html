@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>osu! to Sinker Sound Fish Converter</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.0/dist/ffmpeg.min.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #2c2f33;
+      --panel-bg: #23272a;
+      --text-color: #e0e0e0;
+      --border-color: #4f545c;
+      --accent-color: #7289da;
+      --accent-hover: #5b6eae;
+      --disabled-color: #99aab5;
+      --error-color: #f04747;
+      --success-color: #43b581;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: var(--accent-color);
+      margin-bottom: 20px;
+    }
+
+    .main-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .panel {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+    }
+
+    #drop-zone {
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    #drop-zone.dragover {
+      background-color: rgba(114, 137, 218, 0.2);
+      border-color: var(--accent-color);
+    }
+
+    #osz-input {
+      display: none;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 1em;
+    }
+
+    input[type="number"] {
+      width: 120px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: var(--accent-hover);
+    }
+
+    button:disabled {
+      background-color: var(--border-color);
+      color: var(--disabled-color);
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      text-align: center;
+      width: 100%;
+      max-width: 1000px;
+      font-family: monospace;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #model-container {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 400px;
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>osu! to Sinker Sound Fish Converter</h1>
+
+  <div class="main-container">
+    <div class="panel">
+      <h2>1. Input</h2>
+      <div id="drop-zone">
+        <p>Drop .osz file here, or click to select</p>
+        <input type="file" id="osz-input" accept=".osz">
+      </div>
+      <div id="beatmap-details" class="hidden">
+        <div class="form-group">
+          <label for="difficulty-select">Select Difficulty:</label>
+          <select id="difficulty-select"></select>
+        </div>
+        <div class="form-group">
+          <label for="bpm-input">BPM:</label>
+          <input type="number" id="bpm-input" min="1">
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>2. Output Configuration</h2>
+      <div class="form-group">
+        <label for="fish-name-input">Fish Name (for .fishchart file):</label>
+        <input type="text" id="fish-name-input" placeholder="e.g. My Awesome Fish">
+      </div>
+
+      <div class="form-group">
+        <label for="tension-multiplier-select">Fish Tension Multiplier:</label>
+        <select id="tension-multiplier-select">
+          <option value="1.0" selected="selected">1.0 (Default)</option>
+          <option value="0.9">0.9</option>
+          <option value="0.8">0.8</option>
+          <option value="0.7">0.7</option>
+          <option value="0.6">0.6</option>
+          <option value="0.5">0.5</option>
+          <option value="0.4">0.4</option>
+          <option value="0.3">0.3</option>
+          <option value="0.2">0.2</option>
+          <option value="0.1">0.1</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fish-model-select">Select Fish:</label>
+        <select id="fish-model-select">
+          <option value="" selected="selected">-- No Model --</option>
+          <option value="angelic_fish.tres">Angel Fish</option>
+          <option value="coal_fish_data.tres">Coal Fish</option>
+          <option value="petals_fish_data.tres">Petal Fish</option>
+          <option value="Cool_perch.tres">Cool Perch</option>
+          <option value="great_cat_fish_data.tres">Great Catfish</option>
+          <option value="horned_bass.tres">Horned Bass</option>
+          <option value="kettle_fish_data.tres">Kettle Fish</option>
+          <option value="lake_small_fish_data.tres">Lake1</option>
+          <option value="lake_small_fish_2_data.tres">Lake2</option>
+          <option value="lake_small_fish_3_data.tres">Lake3</option>
+          <option value="lotus_carp_fish_data.tres">Lotus Carpfish</option>
+          <option value="mineral_fish.tres">Mineral Fish</option>
+          <option value="rock_fish.tres">Rock Fish</option>
+          <option value="star_lily_fish_data.tres">Star Lilyfish</option>
+        </select>
+      </div>
+      <button id="convert-btn" disabled="disabled">Convert &amp; Download</button>
+    </div>
+  </div>
+
+  <div id="status">Ready to start. Please provide an .osz file.</div>
+
+  <div id="model-container" class="hidden">
+    <model-viewer id="fish-viewer" src="" camera-controls="" auto-rotate="" ar="" shadow-intensity="1"
+      ar-status="not-presenting"></model-viewer>
+  </div>
+
+  <script>
+    // Converts osu! beatmaps to Sinker Sound fish. Now with MP3->OGG conversion.
+    (function () {
+      // --- CONSTANTS ---
+      const OSU_CANVAS_WIDTH = 512;
+      const OSU_CANVAS_HEIGHT = 384;
+      const OSU_ASPECT_RATIO = OSU_CANVAS_WIDTH / OSU_CANVAS_HEIGHT;
+
+      // --- DOM ELEMENTS ---
+      const dropZone = document.getElementById('drop-zone');
+      const oszInput = document.getElementById('osz-input');
+      const beatmapDetailsDiv = document.getElementById('beatmap-details');
+      const difficultySelect = document.getElementById('difficulty-select');
+      const bpmInput = document.getElementById('bpm-input');
+      const fishNameInput = document.getElementById('fish-name-input');
+      const convertBtn = document.getElementById('convert-btn');
+      const statusDiv = document.getElementById('status');
+      const fishModelSelect = document.getElementById('fish-model-select');
+      const modelContainer = document.getElementById('model-container');
+      const fishViewer = document.getElementById('fish-viewer');
+
+      // --- APP STATE ---
+      let loadedOsz = null;
+      let parsedBeatmaps = [];
+      let audioFile = { name: null, data: null };
+
+      // --- HELPER FUNCTIONS ---
+      function updateStatus(message, type = 'info') {
+        statusDiv.textContent = message;
+        statusDiv.style.color = 'var(--text-color)';
+        if (type === 'error') statusDiv.style.color = 'var(--error-color)';
+        if (type === 'success') statusDiv.style.color = 'var(--success-color)';
+      }
+
+      function resetUI() {
+        beatmapDetailsDiv.classList.add('hidden');
+        difficultySelect.innerHTML = '';
+        bpmInput.value = '';
+        fishNameInput.value = '';
+        convertBtn.disabled = true;
+        loadedOsz = null;
+        parsedBeatmaps = [];
+        audioFile = { name: null, data: null };
+        fishModelSelect.selectedIndex = 0;
+        modelContainer.classList.add('hidden');
+        fishViewer.removeAttribute('src');
+      }
+
+      function parseOsuFile(content, fileName) {
+        const lines = content.split(/\r?\n/);
+        const beatmap = {
+          fileName: fileName,
+          audioFilename: '',
+          audioLeadIn: 0,
+          title: '',
+          artist: '',
+          version: '',
+          timingPoints: [],
+          hitObjects: []
+        };
+        let currentSection = '';
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+          if (trimmedLine.startsWith('//') || trimmedLine === '') continue;
+          if (trimmedLine.startsWith('[')) {
+            currentSection = trimmedLine;
+            continue;
+          }
+          switch (currentSection) {
+            case '[General]':
+              if (trimmedLine.startsWith('AudioFilename:')) beatmap.audioFilename = trimmedLine.substring(14).trim();
+              if (trimmedLine.startsWith('AudioLeadIn:')) beatmap.audioLeadIn = parseInt(trimmedLine.substring(12).trim(), 10) || 0;
+              break;
+            case '[Metadata]':
+              if (trimmedLine.startsWith('Title:')) beatmap.title = trimmedLine.substring(6).trim();
+              if (trimmedLine.startsWith('Artist:')) beatmap.artist = trimmedLine.substring(7).trim();
+              if (trimmedLine.startsWith('Version:')) beatmap.version = trimmedLine.substring(8).trim();
+              break;
+            case '[TimingPoints]':
+              const tpParts = trimmedLine.split(',');
+              if (tpParts.length >= 2 && parseFloat(tpParts[1]) > 0) {
+                beatmap.timingPoints.push({
+                  time: parseInt(tpParts[0], 10),
+                  beatLength: parseFloat(tpParts[1]),
+                  bpm: 60000 / parseFloat(tpParts[1])
+                });
+              }
+              break;
+            case '[HitObjects]':
+              const hoParts = trimmedLine.split(',');
+              if (hoParts.length >= 3) {
+                beatmap.hitObjects.push({
+                  x: parseInt(hoParts[0], 10),
+                  y: parseInt(hoParts[1], 10),
+                  time: parseInt(hoParts[2], 10)
+                });
+              }
+              break;
+          }
+        }
+        return beatmap;
+      }
+
+      function updateUIForSelection() {
+        const selectedIndex = difficultySelect.selectedIndex;
+        if (selectedIndex < 0 || parsedBeatmaps.length === 0) return;
+        const selectedBeatmap = parsedBeatmaps[selectedIndex];
+        const firstTimingPoint = selectedBeatmap.timingPoints[0];
+        if (firstTimingPoint) {
+          bpmInput.value = firstTimingPoint.bpm.toFixed(2);
+        } else {
+          bpmInput.value = 120; // Default fallback
+          updateStatus('Warning: Could not find a primary timing point. Using 120 BPM.', 'error');
+        }
+        if (!fishNameInput.value) { // Only set if empty
+          fishNameInput.value = `${selectedBeatmap.artist} - ${selectedBeatmap.title}`;
+        }
+        convertBtn.disabled = false;
+      }
+
+      // --- CORE CONVERSION LOGIC ---
+      function computeAngle(x, y) {
+        const dx = x - OSU_CANVAS_WIDTH / 2;
+        const dy = (y - OSU_CANVAS_HEIGHT / 2) * OSU_ASPECT_RATIO;
+        let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        if (angle < 0) angle += 360;
+        return angle;
+      }
+
+      function computePos(ms, bpm) {
+        return (ms * bpm / 60000);
+      }
+
+      // UPDATED function for ffmpeg.wasm v0.11.0
+      async function convertAndDownload() {
+        updateStatus('Starting conversion...');
+        convertBtn.disabled = true;
+
+        let ffmpeg = null;
+
+        try {
+          const selectedIndex = difficultySelect.selectedIndex;
+          const beatmap = parsedBeatmaps[selectedIndex];
+          const fishName = fishNameInput.value.trim() || 'Untitled Fish';
+          const bpm = parseFloat(bpmInput.value);
+          // ADDED: Read the value from the new tension multiplier dropdown
+          const tensionMultiplier = parseFloat(document.getElementById('tension-multiplier-select').value);
+
+          if (!beatmap || isNaN(bpm)) {
+            throw new Error("Invalid beatmap data or BPM.");
+          }
+
+          const totalOffset = beatmap.audioLeadIn;
+
+          updateStatus('Generating Sinker Sound events...');
+          const events = [];
+          let maxPos = 0;
+          events.push({ "angle": -45.0, "bpm": bpm, "event_type": ["AfterTimeEvent"], "methodName": "bpm_change", "pos": 0.0, "type": "CallCustomMethod" });
+          events.push({ "angle": 22.5, "instant_end": true, "loops": 0.7, "methodName": "progress_phase", "pos": 0.0, "type": "CallCustomMethod", "y": 2.0 });
+          events.push({ "angle": 0.0, "event_type": ["AfterTimeEvent"], "methodName": "pitch_set", "pitch_set_array": "B-1,A-1,B-1,A-1,A-1", "pitch_set_int": 1.0, "pos": 0.5, "type": "CallCustomMethod", "y": 2.0 });
+
+          // ADDED: The new tension multiplier event
+          events.push({
+            "angle": -45.0,
+            "event_type": ["AfterTimeEvent"],
+            "methodName": "tension_natural_loss_multiplier",
+            "pos": 1.0,
+            "type": "CallCustomMethod",
+            "value": tensionMultiplier
+          });
+
+          for (const ho of beatmap.hitObjects) {
+            const effectiveTime = ho.time - totalOffset;
+            if (effectiveTime < 0) continue;
+            const angle = parseFloat(computeAngle(ho.x, ho.y).toFixed(2));
+            const pos = parseFloat(computePos(effectiveTime, bpm).toFixed(2));
+            if (pos > maxPos) { maxPos = pos; }
+            events.push({ "angle": angle, "methodName": "pull_beat", "pos": pos, "type": "CallCustomMethod", "y": 2.0 });
+          }
+
+          let audioFileData;
+          let outputAudioFilename = audioFile.name;
+          const needsConversion = audioFile.name.toLowerCase().endsWith('.mp3');
+
+          if (needsConversion) {
+            updateStatus('Initializing audio converter...');
+            // Syntax for v0.11.0
+            ffmpeg = FFmpeg.createFFmpeg({ log: true });
+
+            updateStatus('Audio is MP3, converting to OGG. This may take a moment...');
+            await ffmpeg.load();
+
+            const inputAudioData = await loadedOsz.file(audioFile.name).async('uint8array');
+            ffmpeg.FS('writeFile', audioFile.name, inputAudioData);
+
+            outputAudioFilename = audioFile.name.replace(/\.mp3/i, '.ogg');
+            // Use -q:a 8 for high quality. The scale is ~0-10, with 10 being best.
+            await ffmpeg.run('-i', audioFile.name, '-c:a', 'libvorbis', '-q:a', '8', outputAudioFilename);
+
+            const data = ffmpeg.FS('readFile', outputAudioFilename);
+            audioFileData = new Blob([data.buffer], { type: 'audio/ogg' });
+            updateStatus('Audio conversion successful!');
+          } else {
+            updateStatus('Audio is already compatible. Packaging file...');
+            audioFileData = await loadedOsz.file(audioFile.name).async('blob');
+          }
+
+          updateStatus('Measuring audio duration…');
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const audioBuffer = await audioCtx.decodeAudioData(await audioFileData.arrayBuffer());
+          const durationMs = audioBuffer.duration * 1000;
+          const usableMs = Math.max(0, durationMs - totalOffset);
+          const trueEndPos = computePos(usableMs, bpm);
+          const endPos = Math.max(maxPos, trueEndPos);
+
+          events.sort((a, b) => a.pos - b.pos);
+          events.push({ "angle": 0.0, "methodName": "loop_end", "pos": parseFloat((endPos - 1.0).toFixed(2)), "type": "CallCustomMethod", "y": 2.0 });
+          events.push({ "angle": 0.0, "event_type": ["AfterTimeEvent"], "methodName": "progress_end", "pos": parseFloat(endPos.toFixed(2)), "type": "CallCustomMethod", "y": 2.0 });
+
+          const fishchartJson = { "events": events, "song_info": { "bpm": bpm } };
+
+          updateStatus('Packaging .zip file...');
+          const outputZip = new JSZip();
+          outputZip.file(`${fishName}.fishchart`, JSON.stringify(fishchartJson, null, 2));
+          outputZip.file(outputAudioFilename, audioFileData);
+
+          const selectedTres = fishModelSelect.value;
+          if (selectedTres) {
+            updateStatus(`Including model file: ${selectedTres}…`);
+            // 1) fetch the original as text
+            const res = await fetch(`/tres/${selectedTres}`);
+            if (!res.ok) throw new Error(`Failed to load model file "${selectedTres}"`);
+            let tresText = await res.text();
+
+            // 2) pull your beatmap values (however you already have them)
+            const songName = /* e.g. */ beatmap.artist + " - " + beatmap.title;
+
+            // 3) replace the lines using regex
+            tresText = tresText
+              .replace(/song_name\s*=\s*".*?"/, `song_name = "${songName}"`)
+              .replace(/bpm\s*=\s*\d+/, `bpm = ${bpm}`);
+
+            // 4) add the patched file back into the ZIP
+            const patchedBlob = new Blob([tresText], { type: 'text/plain;charset=utf-8' });
+            outputZip.file(selectedTres, patchedBlob);
+          }
+
+          updateStatus('Generating download...');
+          const zipBlob = await outputZip.generateAsync({ type: 'blob' });
+          const downloadLink = document.createElement('a');
+          downloadLink.href = URL.createObjectURL(zipBlob);
+          downloadLink.download = 'chart_data.zip';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          URL.revokeObjectURL(downloadLink.href);
+
+          updateStatus('Successfully created chart_data.zip!', 'success');
+        } catch (error) {
+          console.error(error);
+          updateStatus(`Conversion Failed: ${error.message}`, 'error');
+        } finally {
+          // Safely terminate ffmpeg only if it was loaded.
+          if (ffmpeg && ffmpeg.isLoaded()) {
+            ffmpeg.exit();
+          }
+          convertBtn.disabled = false;
+        }
+      }
+
+      // --- EVENT HANDLERS ---
+      async function handleFile(file) {
+        if (!file) return;
+        resetUI();
+        updateStatus('Reading .osz file...');
+        try {
+          loadedOsz = await JSZip.loadAsync(file);
+          const osuFiles = [];
+          loadedOsz.forEach((relativePath, zipEntry) => {
+            if (zipEntry.name.toLowerCase().endsWith('.osu')) {
+              osuFiles.push(zipEntry);
+            }
+          });
+          if (osuFiles.length === 0) { throw new Error('No .osu files found in the archive.'); }
+
+          updateStatus(`Found ${osuFiles.length} difficulties. Parsing...`);
+          for (const osuFile of osuFiles) {
+            const content = await osuFile.async('text');
+            const parsed = parseOsuFile(content, osuFile.name);
+            if (parsed.hitObjects.length > 0) { parsedBeatmaps.push(parsed); }
+          }
+          if (parsedBeatmaps.length === 0) { throw new Error('Found .osu files, but none could be parsed or they were empty.'); }
+
+          parsedBeatmaps.sort((a, b) => a.fileName.localeCompare(b.fileName));
+
+          parsedBeatmaps.forEach((bm, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = bm.version || bm.fileName;
+            difficultySelect.appendChild(option);
+          });
+
+          const primaryBeatmap = parsedBeatmaps[0];
+          audioFile.name = primaryBeatmap.audioFilename;
+          if (!loadedOsz.file(audioFile.name)) {
+            throw new Error(`Audio file "${audioFile.name}" not found in the archive.`);
+          }
+
+          updateStatus('Beatmap loaded successfully. Please select a difficulty.', 'success');
+          beatmapDetailsDiv.classList.remove('hidden');
+          updateUIForSelection();
+        } catch (error) {
+          console.error(error);
+          updateStatus(`Error: ${error.message}`, 'error');
+          resetUI();
+        }
+      }
+
+      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); dropZone.classList.add('dragover'); });
+      dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('dragover'); });
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) { handleFile(files[0]); }
+      });
+      dropZone.addEventListener('click', () => { oszInput.click(); });
+      oszInput.addEventListener('change', (e) => { if (e.target.files.length > 0) { handleFile(e.target.files[0]); } });
+      difficultySelect.addEventListener('change', updateUIForSelection);
+      convertBtn.addEventListener('click', convertAndDownload);
+
+      fishModelSelect.addEventListener('change', (e) => {
+        const selectedFish = e.target.value;
+        const modelSrc = fishModels[selectedFish];
+        if (modelSrc) {
+          fishViewer.src = modelSrc;
+          modelContainer.classList.remove('hidden');
+        } else {
+          modelContainer.classList.add('hidden');
+          fishViewer.removeAttribute('src');
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>

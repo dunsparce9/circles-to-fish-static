@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="fish_data_resource" load_steps=5 format=4 uid="uid://binssv3uclssh"]
+
+[ext_resource type="PackedScene" uid="uid://qswetnf3nmn8" path="res://Module/Fishes/Fish_Resource/All_fish/Great_cat_fish/great_catfish_model.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://5ify3tisxhx" path="res://Module/Fishes/Fish_Resource/All_fish/Great_cat_fish/great_cat_fish.tscn" id="2"]
+[ext_resource type="AudioStream" uid="uid://bl2q3r2wonmyv" path="res://Module/Fishes/Fish_Resource/All_fish/Great_cat_fish/chart_data/guardian_lake.ogg" id="3"]
+[ext_resource type="Script" uid="uid://dy62imrgxvc0v" path="res://Module/Fishes/Fish_Resource/Logic/fish_data_resource.gd" id="4"]
+
+[resource]
+script = ExtResource("4")
+fish_scene = ExtResource("2")
+ID = "great_cat_fish"
+fish_name = "Great Cat Fish"
+fish_author = "Chavafei"
+difficulty = 5
+fish_type = 2
+fish_element = [0]
+fish_description = "a Giant Catfish, really big and heavy. it have a really long whisker with faint light at the tip which can lure prey to it.
+This catfish has been fed by Mermaid Lotus for a while. And it has grown a little too big.
+"
+found_location = "Lake - Guardian pond"
+main_location = "Lake"
+song_name = "Flowing Curiosity"
+bpm = 175
+music_file = ExtResource("3")
+fishchart_file = "res://Module/Fishes/Fish_Resource/All_fish/Great_cat_fish/chart_data/great_catfish_chart.fishchart"
+compliment_notes = []
+compliment_notes_arrays = []
+tension_natural_multiplier = 1.0
+fish_model = ExtResource("1")
+fish_icon = null
+fish_record_camera_pos = Vector3(4, 0.5, 0)
+player_holding_position = Vector3(0, 0, 0)
+player_holding_rotation = Vector3(0, 90, 45)
+fish_card_spin_duration = 10.0
+total_rare_visual_random = false
+rare_color_hsv = Vector3(1.3, 1, 1)
+base_worth = 0.0

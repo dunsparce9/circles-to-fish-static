@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="fish_data_resource" load_steps=6 format=4 uid="uid://c5j0a0gyctwhb"]
+
+[ext_resource type="Texture2D" uid="uid://dyikdr0uxgi" path="res://Module/Inventory/Item_icons/fishes/blue_fish.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://m2qmpqoavkwc" path="res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_1/small_fish_model_1.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://csvhh7t8wr06a" path="res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_1/lake_small_fish_1.tscn" id="3"]
+[ext_resource type="AudioStream" uid="uid://tk7o6hmp2jtr" path="res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_1/chart_data/lake_small_fish_1.ogg" id="4"]
+[ext_resource type="Script" uid="uid://dy62imrgxvc0v" path="res://Module/Fishes/Fish_Resource/Logic/fish_data_resource.gd" id="5"]
+
+[resource]
+script = ExtResource("5")
+fish_scene = ExtResource("3")
+ID = "lake_small_fish_1"
+fish_name = "Blue fish"
+fish_author = "Chavafei"
+difficulty = 1
+fish_type = 0
+fish_element = []
+fish_description = "A small blue fish. it looks blue"
+found_location = "Lake - Near cabin"
+main_location = "Lake"
+song_name = "bluish"
+bpm = 130
+music_file = ExtResource("4")
+fishchart_file = "res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_1/chart_data/lake_small_fish_1_chart-easy.fishchart"
+compliment_notes = []
+compliment_notes_arrays = []
+tension_natural_multiplier = 2.0
+fish_model = ExtResource("2")
+fish_icon = ExtResource("1")
+fish_record_camera_pos = Vector3(1.1, 0, 0)
+player_holding_position = Vector3(0, 0, 0.05)
+player_holding_rotation = Vector3(-20, 90, 0)
+fish_card_spin_duration = 5.0
+total_rare_visual_random = false
+rare_color_hsv = Vector3(1.3, 1, 1)
+base_worth = 20.0

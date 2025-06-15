@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="fish_data_resource" load_steps=6 format=4 uid="uid://cuyyru2f7ru2w"]
+
+[ext_resource type="Texture2D" uid="uid://c2icdr8kgojwc" path="res://Module/Inventory/Item_icons/fishes/sunny_fish.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://drj28adhh46cm" path="res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_2/small_fish_model_2.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://ccmpkkycnt524" path="res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_2/lake_small_fish_2.tscn" id="3"]
+[ext_resource type="AudioStream" uid="uid://d3alv2q3sappi" path="res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_2/chart_data/lake_small_fish_2.ogg" id="4"]
+[ext_resource type="Script" uid="uid://dy62imrgxvc0v" path="res://Module/Fishes/Fish_Resource/Logic/fish_data_resource.gd" id="5"]
+
+[resource]
+script = ExtResource("5")
+fish_scene = ExtResource("3")
+ID = "lake_small_fish_2"
+fish_name = "Dawn fish"
+fish_author = "Chavafei"
+difficulty = 1
+fish_type = 0
+fish_element = []
+fish_description = "A small fish that faintly smells like the sunset."
+found_location = "Lake - Near cabin"
+main_location = "Lake"
+song_name = "faint sun"
+bpm = 120
+music_file = ExtResource("4")
+fishchart_file = "res://Module/Fishes/Fish_Resource/All_fish/lake_small_fish_2/chart_data/lake_small_fish_2.fishchart"
+compliment_notes = []
+compliment_notes_arrays = []
+tension_natural_multiplier = 1.0
+fish_model = ExtResource("2")
+fish_icon = ExtResource("1")
+fish_record_camera_pos = Vector3(1.1, 0, 0)
+player_holding_position = Vector3(0, 0, 0.05)
+player_holding_rotation = Vector3(-20, 90, 0)
+fish_card_spin_duration = 5.0
+total_rare_visual_random = false
+rare_color_hsv = Vector3(1.3, 1, 1)
+base_worth = 2000.0
