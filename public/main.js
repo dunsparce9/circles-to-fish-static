@@ -118,7 +118,7 @@
             updateStatus('Warning: Could not find a primary timing point. Using 120 BPM.', 'error');
         }
         if (!fishNameInput.value) { // Only set if empty
-            fishNameInput.value = `${selectedBeatmap.artist} - ${selectedBeatmap.title}`;
+            fishNameInput.value = selectedBeatmap.title;
         }
         convertBtn.disabled = false;
     }
@@ -180,7 +180,7 @@
             }
 
             let audioFileData;
-            let outputAudioFilename = audioFile.name;
+            let outputAudioFilename = fishName + '.ogg';
             const needsConversion = audioFile.name.toLowerCase().endsWith('.mp3');
 
             if (needsConversion) {
@@ -190,7 +190,6 @@
                 await ffmpeg.load();
                 const inputAudioData = await loadedOsz.file(audioFile.name).async('uint8array');
                 ffmpeg.FS('writeFile', audioFile.name, inputAudioData);
-                outputAudioFilename = audioFile.name.replace(/\.mp3/i, '.ogg');
 
                 // Build the FFmpeg command array, adding the -ss trim argument if needed.
                 const ffmpegArgs = [];
@@ -237,7 +236,7 @@
                 const res = await fetch(`/tres/${selectedTres}`);
                 if (!res.ok) throw new Error(`Failed to load model file "${selectedTres}"`);
                 let tresText = await res.text();
-                const songName = /* e.g. */ beatmap.artist + " - " + beatmap.title;
+                const songName = beatmap.title;
                 tresText = tresText
                     .replace(/song_name\s*=\s*".*?"/, `song_name = "${songName}"`)
                     .replace(/bpm\s*=\s*\d+/, `bpm = ${bpm}`);
@@ -248,12 +247,12 @@
             const zipBlob = await outputZip.generateAsync({ type: 'blob' });
             const downloadLink = document.createElement('a');
             downloadLink.href = URL.createObjectURL(zipBlob);
-            downloadLink.download = 'chart_data.zip';
+            downloadLink.download = fishName + '.zip';
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
             URL.revokeObjectURL(downloadLink.href);
-            updateStatus('Successfully created chart_data.zip!', 'success');
+            updateStatus('Successfully created ' + fishName + '.zip!', 'success');
         } catch (error) {
             console.error(error);
             updateStatus(`Conversion Failed: ${error.message}`, 'error');
