@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 </head>
 <div id="window-area" style="overflow:hidden">
-    <div class="window active glass" id="mainwindow" style="max-width: 350px; --window-background-color: #ff6464;">
+    <div class="window active glass" id="mainwindow" style="max-width: 350px; --window-background-color: #45a5af;">
         <div class="title-bar">
             <div class="title-bar-text">osu! to Sinker Sound</div>
             <div class="title-bar-controls">
@@ -25,7 +25,7 @@
         <div class="window-body has-space">
             <menu role="tablist" aria-label="mainTabs">
                 <button role="tab" aria-controls="converter" aria-selected="true">Converter</button>
-                <button role="tab" aria-controls="help">Help & FAQ</button>
+                <button role="tab" aria-controls="help">Help & Info</button>
                 <button role="tab" aria-controls="about">About</button>
             </menu>
             <article role="tabpanel" id="converter">
@@ -97,7 +97,7 @@
                 <b>Limitations:</b>
                 <p>
                 <ul>
-                    <li>Everything is converted to simple beat pulses only (e.g. sliders are treated as circles).</li>
+                    <li>Everything is converted to simple beat pulses only (i.e. sliders are treated as circles).</li>
                     <li>Maps that change BPM mid way are not supported due to lack of offset option in sinker sound.
                     </li>
                 </ul>
@@ -109,12 +109,13 @@
                     <b>osu! to Sinker Sound converter</b>
                 <p>Version 1.0</p>
                 <p>Made by SpiritChain and Toz<br>(Discord: @spiritchain / @tozworth)</p>
-                <p><b>Not affiliated with ppy Pty Ltd or Chavafei. "osu!" is a trademark of ppy Pty Ltd.</b></p>
+                <p><b>Not affiliated with ppy Pty Ltd or Chavafei.<br>"osu!" is a trademark of ppy Pty Ltd.</b></p>
                 <p>License: MIT</p>
                 <div class="field-row">
                     <button id="link1" onclick="link1click()">GitHub</button>
                     <button id="link2" onclick="link2click()">Sinker Sound Discord</button>
                 </div>
+                <p>UI made with <a href="https://khang-nd.github.io/7.css/">7.css</a> library by Khang (khang-nd).</p>
                 </p>
             </article>
         </div>
