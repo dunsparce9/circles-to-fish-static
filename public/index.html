@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 </head>
 <div id="window-area">
-    <div class="window active glass" id="mainwindow">
+    <div class="window active" id="mainwindow">
         <div class="title-bar">
             <div class="title-bar-text">osu! to Sinker Sound</div>
             <div class="title-bar-controls">
@@ -116,11 +116,23 @@
                 </div>
                 <p>UI made with <a href="https://khang-nd.github.io/7.css/">7.css</a> library by Khang (khang-nd).</p>
                 </p>
+                <button id="link1" onclick="showlogs()">Show log window</button>
             </article>
         </div>
         <div class="status-bar">
             <p class="status-bar-field" id="status">Waiting for .osz file.</p>
             <p class="status-bar-field" id="status">v1.0</p>
+        </div>
+    </div>
+    <div class="window hidden" id="logwindow">
+        <div class="title-bar">
+            <div class="title-bar-text">Logs (for debugging)</div>
+            <div class="title-bar-controls">
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="window-body has-space">
+            <textarea id="logarea" rows="20"></textarea>
         </div>
     </div>
 </div>
@@ -131,28 +143,34 @@
         handle: ".title-bar",
         scroll: false
     })
+    $("#logwindow").draggable({
+        handle: ".title-bar",
+        scroll: false
+    })
     function link1click() {
         window.open("https://github.com/dunsparce9/circles-to-fish-static", '_blank').focus();
     }
     function link2click() {
         window.open("https://discord.gg/D9ASJv7P", '_blank').focus();
     }
+    function showlogs() {
+        document.getElementById('logwindow').classList.remove('hidden');
+    }
     function closeWindow(el) {
         const win = el.closest('.window');
         win.classList.add('closing');
         win.addEventListener('animationend', () => win.remove(), { once: true });
     }
-
     document.addEventListener('click', e => {
         if (e.target.matches('.title-bar-controls button[aria-label="Close"]')) {
             closeWindow(e.target);
         }
     });
     document.addEventListener('DOMContentLoaded', () => {
-      const win = document.getElementById('mainwindow');
-      win.classList.add('opening');
-      win.addEventListener('animationend', () => {
-        win.classList.remove('opening');
-      }, { once: true });
+        const win = document.getElementById('mainwindow');
+        win.classList.add('opening');
+        win.addEventListener('animationend', () => {
+            win.classList.remove('opening');
+        }, { once: true });
     });
 </script>

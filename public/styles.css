@@ -13,9 +13,26 @@ body {
 }
 
 #mainwindow {
+    position: absolute;
+    z-index: 1;
     width: 350px;
     height: 388px;
     --window-background-color: #45a5af;
+}
+
+#logwindow {
+    position: fixed;
+    right: 10px; bottom: 20px;
+    z-index: 0;
+    width: 500px;
+    height:370px;
+    --window-background-color: #b1b1b1;
+}
+
+#logarea {
+    width:470px;
+    height:320px;
+    resize:none;
 }
 
 .window-body {

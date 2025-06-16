@@ -13,6 +13,7 @@
     const fishNameInput = document.getElementById('fish-name-input');
     const convertBtn = document.getElementById('convert-btn');
     const statusDiv = document.getElementById('status');
+    const logDiv = document.getElementById('logarea');
     const fishModelSelect = document.getElementById('fish-model-select');
     const fishViewer = document.getElementById('fish-viewer');
     // --- APP STATE ---
@@ -25,6 +26,7 @@
         statusDiv.style.color = 'var(--text-color)';
         if (type === 'error') statusDiv.style.color = 'var(--error-color)';
         if (type === 'success') statusDiv.style.color = 'var(--success-color)';
+        logDiv.textContent += message + "\n";
     }
     function resetUI() {
         beatmapDetailsDiv.classList.add('hidden');
