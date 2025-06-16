@@ -137,15 +137,22 @@
     function link2click() {
         window.open("https://discord.gg/D9ASJv7P", '_blank').focus();
     }
-        function closeWindow(el) {
-            const win = el.closest('.window');
-            win.classList.add('closing');
-            win.addEventListener('animationend', () => win.remove(), { once: true });
-        }
+    function closeWindow(el) {
+        const win = el.closest('.window');
+        win.classList.add('closing');
+        win.addEventListener('animationend', () => win.remove(), { once: true });
+    }
 
-        document.addEventListener('click', e => {
-            if (e.target.matches('.title-bar-controls button[aria-label="Close"]')) {
-                closeWindow(e.target);
-            }
-        });
+    document.addEventListener('click', e => {
+        if (e.target.matches('.title-bar-controls button[aria-label="Close"]')) {
+            closeWindow(e.target);
+        }
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const win = document.getElementById('mainwindow');
+      win.classList.add('opening');
+      win.addEventListener('animationend', () => {
+        win.classList.remove('opening');
+      }, { once: true });
+    });
 </script>
