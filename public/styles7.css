@@ -9,8 +9,16 @@ body {
     align-items: center;
     width: 98vw;
     height: 98vh;
+    overflow:hidden;
 }
 
+#mainwindow {
+    max-width: 350px;
+    --window-background-color: #45a5af;
+}
+
+#bpm-input { width: 50px; }
+#tension-multiplier-select {width: 50px}
 input {
     font: var(--font);
     max-width: 250px;
