@@ -14,6 +14,7 @@
     const convertBtn = document.getElementById('convert-btn');
     const statusDiv = document.getElementById('status');
     const logDiv = document.getElementById('logarea');
+    const failMsg = document.getElementById('failed-error-msg');
     const fishModelSelect = document.getElementById('fish-model-select');
     const fishViewer = document.getElementById('fish-viewer');
     // --- APP STATE ---
@@ -26,6 +27,7 @@
         statusDiv.style.color = 'var(--text-color)';
         if (type === 'error') {
             statusDiv.style.color = 'var(--error-color)';
+            failMsg.innerHTML = message;
             openfaildialog();
         }
         if (type === 'success') statusDiv.style.color = 'var(--success-color)';
@@ -257,7 +259,7 @@
             updateStatus('Successfully created ' + fishName + '.zip!', 'success');
         } catch (error) {
             console.error(error);
-            updateStatus(`Conversion Failed: ${error.message}`, 'error');
+            updateStatus(`Error: ${error.message}`, 'error');
         } finally {
             if (ffmpeg && ffmpeg.isLoaded()) {
                 ffmpeg.exit();
