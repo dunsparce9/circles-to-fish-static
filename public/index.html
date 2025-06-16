@@ -163,6 +163,8 @@
         }, { once: true });
         allWindows.forEach(w => w.classList.remove('active'));
         logWin.classList.add('active');
+        highestZ += 1;
+        logWin.style.zIndex = highestZ;
     }
 
     function closeWindow(el) {
