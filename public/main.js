@@ -14,7 +14,6 @@
     const convertBtn = document.getElementById('convert-btn');
     const statusDiv = document.getElementById('status');
     const fishModelSelect = document.getElementById('fish-model-select');
-    const modelContainer = document.getElementById('model-container');
     const fishViewer = document.getElementById('fish-viewer');
     // --- APP STATE ---
     let loadedOsz = null;
@@ -37,8 +36,6 @@
         parsedBeatmaps = [];
         audioFile = { name: null, data: null };
         fishModelSelect.selectedIndex = 0;
-        modelContainer.classList.add('hidden');
-        fishViewer.removeAttribute('src');
     }
 
     // --- MODIFIED parseOsuFile FUNCTION ---
@@ -306,14 +303,6 @@
             resetUI();
         }
     }
-    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); dropZone.classList.add('dragover'); });
-    dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('dragover'); });
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('dragover');
-        const files = e.dataTransfer.files;
-        if (files.length > 0) { handleFile(files[0]); }
-    });
-    dropZone.addEventListener('click', () => { oszInput.click(); });
     oszInput.addEventListener('change', (e) => { if (e.target.files.length > 0) { handleFile(e.target.files[0]); } });
     difficultySelect.addEventListener('change', updateUIForSelection);
     convertBtn.addEventListener('click', convertAndDownload);

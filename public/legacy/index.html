@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>osu! to Sinker Sound Fish Converter</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.0/dist/ffmpeg.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <h1>osu! to Sinker Sound Fish Converter</h1>
+  <div class="main-container">
+    <div class="panel">
+      <h2>1. Input</h2>
+      <div id="drop-zone">
+        <p>Drop .osz file here, or click to select</p>
+        <input type="file" id="osz-input" accept=".osz">
+      </div>
+      <div id="beatmap-details" class="hidden">
+        <div class="form-group">
+          <label for="difficulty-select">Select Difficulty:</label>
+          <select id="difficulty-select"></select>
+        </div>
+        <div class="form-group">
+          <label for="bpm-input">BPM:</label>
+          <input type="number" id="bpm-input" min="1">
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>2. Output Configuration</h2>
+      <div class="form-group">
+        <label for="fish-name-input">Fish Name (for .fishchart file):</label>
+        <input type="text" id="fish-name-input" placeholder="e.g. My Awesome Fish">
+      </div>
+      <div class="form-group">
+        <label for="tension-multiplier-select">Fish Tension Multiplier:</label>
+        <select id="tension-multiplier-select">
+          <option value="1.0" selected="selected">1.0 (Default)</option>
+          <option value="0.9">0.9</option>
+          <option value="0.8">0.8</option>
+          <option value="0.7">0.7</option>
+          <option value="0.6">0.6</option>
+          <option value="0.5">0.5</option>
+          <option value="0.4">0.4</option>
+          <option value="0.3">0.3</option>
+          <option value="0.2">0.2</option>
+          <option value="0.1">0.1</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fish-model-select">Select Fish:</label>
+        <select id="fish-model-select">
+          <option value="" selected="selected">-- No Model --</option>
+          <option value="angelic_fish.tres">Angel Fish</option>
+          <option value="coal_fish_data.tres">Coal Fish</option>
+          <option value="petals_fish_data.tres">Petal Fish</option>
+          <option value="Cool_perch.tres">Cool Perch</option>
+          <option value="great_cat_fish_data.tres">Great Catfish</option>
+          <option value="horned_bass.tres">Horned Bass</option>
+          <option value="kettle_fish_data.tres">Kettle Fish</option>
+          <option value="lake_small_fish_data.tres">Lake1</option>
+          <option value="lake_small_fish_2_data.tres">Lake2</option>
+          <option value="lake_small_fish_3_data.tres">Lake3</option>
+          <option value="lotus_carp_fish_data.tres">Lotus Carpfish</option>
+          <option value="mineral_fish.tres">Mineral Fish</option>
+          <option value="rock_fish.tres">Rock Fish</option>
+          <option value="star_lily_fish_data.tres">Star Lilyfish</option>
+        </select>
+      </div>
+      <button id="convert-btn" disabled="disabled">Convert &amp; Download</button>
+    </div>
+  </div>
+  <div id="status">Ready to start. Please provide an .osz file.</div>
+  <div id="model-container" class="hidden">
+    <model-viewer id="fish-viewer" src="" camera-controls="" auto-rotate="" ar="" shadow-intensity="1"
+      ar-status="not-presenting"></model-viewer>
+  </div>
+</body>
+<script src="main.js"></script>
+</html>

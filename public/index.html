@@ -2,84 +2,139 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>osu! to Sinker Sound Fish Converter</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
-  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.0/dist/ffmpeg.min.js"></script>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>osu! to Sinker Sound Fish Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.0/dist/ffmpeg.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/7.css">
+    <link rel="stylesheet" href="styles7.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 </head>
+<div id="window-area" style="overflow:hidden">
+    <div class="window active glass" id="mainwindow" style="max-width: 350px">
+        <div class="title-bar">
+            <div class="title-bar-text">osu! to Sinker Sound</div>
+            <div class="title-bar-controls">
+                <button aria-label="Close" onclick="window.close()"></button>
+            </div>
+        </div>
+        <div class="window-body has-space">
+            <menu role="tablist" aria-label="mainTabs">
+                <button role="tab" aria-controls="converter" aria-selected="true">Converter</button>
+                <button role="tab" aria-controls="help">Help & FAQ</button>
+                <button role="tab" aria-controls="about">About</button>
+            </menu>
+            <article role="tabpanel" id="converter">
+                <fieldset>
+                    <legend>Input: osu! beatmap (.osz)</legend>
+                    <input type="file" id="osz-input" accept=".osz">
+                    <p></p>
+                    <div class="field-row" id="beatmap-details">
+                        <label for="difficulty-select">Difficulty</label>
+                        <select id="difficulty-select">
+                        </select>
+                        <label for="bpm-input">BPM</label>
+                        <input id="bpm-input" type="text" style="width: 50px;" />
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Output: Sinker Sound bundle</legend>
+                    <div class="field-row-stacked" style="width: 200px">
+                        <label for="fish-name-input">Fish / chart name:</label>
+                        <input id="fish-name-input" type="text">
+                    </div>
+                    <div class="field-row" style="width: 200px; justify-content: space-between;">
+                        <label for="text28">Fish model</label>
+                        <select id="fish-model-select">
+                            <option value="" selected="selected">-- No Model --</option>
+                            <option value="angelic_fish.tres">Angel Fish</option>
+                            <option value="coal_fish_data.tres">Coal Fish</option>
+                            <option value="petals_fish_data.tres">Petal Fish</option>
+                            <option value="Cool_perch.tres">Cool Perch</option>
+                            <option value="great_cat_fish_data.tres">Great Catfish</option>
+                            <option value="horned_bass.tres">Horned Bass</option>
+                            <option value="kettle_fish_data.tres">Kettle Fish</option>
+                            <option value="lake_small_fish_data.tres">Lake1</option>
+                            <option value="lake_small_fish_2_data.tres">Lake2</option>
+                            <option value="lake_small_fish_3_data.tres">Lake3</option>
+                            <option value="lotus_carp_fish_data.tres">Lotus Carpfish</option>
+                            <option value="mineral_fish.tres">Mineral Fish</option>
+                            <option value="rock_fish.tres">Rock Fish</option>
+                            <option value="star_lily_fish_data.tres">Star Lilyfish</option>
+                        </select>
+                    </div>
+                    <div class="field-row" style="width: 200px; justify-content: space-between;">
+                        <label for="text28">Fish tension</label>
+                        <select id="tension-multiplier-select" style="width: 50px">
+                            <option value="1.0" selected="selected">1.0 (Default)</option>
+                            <option value="0.9">0.9</option>
+                            <option value="0.8">0.8</option>
+                            <option value="0.7">0.7</option>
+                            <option value="0.6">0.6</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.4">0.4</option>
+                            <option value="0.3">0.3</option>
+                            <option value="0.2">0.2</option>
+                            <option value="0.1">0.1</option>
+                        </select>
+                    </div>
+                </fieldset>
+                <section class="field-row" style="justify-content: flex-end;">
+                    <label>If you're happy with your settings, press:</label>
+                    <button id="convert-btn" disabled="disabled">Convert!</button>
+                </section>
+            </article>
 
-<body>
-  <h1>osu! to Sinker Sound Fish Converter</h1>
-  <div class="main-container">
-    <div class="panel">
-      <h2>1. Input</h2>
-      <div id="drop-zone">
-        <p>Drop .osz file here, or click to select</p>
-        <input type="file" id="osz-input" accept=".osz">
-      </div>
-      <div id="beatmap-details" class="hidden">
-        <div class="form-group">
-          <label for="difficulty-select">Select Difficulty:</label>
-          <select id="difficulty-select"></select>
+            <article role="tabpanel" hidden id="help">
+                <p>
+                    <b>Usage:</b>
+                <p>Select an .osz file, select the difficulty, adjust BPM if needed, select your fish model, then press
+                    Convert.</p>
+                <b>Limitations:</b>
+                <p>
+                <ul>
+                    <li>Everything is converted to simple beat pulses only (e.g. sliders are treated as circles).</li>
+                    <li>Maps that change BPM mid way are not supported due to lack of offset option in sinker sound.
+                    </li>
+                </ul>
+                </p>
+                </p>
+            </article>
+            <article role="tabpanel" hidden id="about">
+                <p>
+                    <b>osu! to Sinker Sound converter</b>
+                <p>Version 1.0</p>
+                <p>Made by SpiritChain and Toz<br>(Discord: @spiritchain / @tozworth)</p>
+                <p><b>Not affiliated with ppy Pty Ltd or Chavafei. "osu!" is a trademark of ppy Pty Ltd.</b></p>
+                <p>License: MIT</p>
+                <div class="field-row">
+                    <button id="link1" onclick="link1click">GitHub</button>
+                    <button id="link2" onclick="link2click">Sinker Sound Discord</button>
+                </div>
+                </p>
+            </article>
         </div>
-        <div class="form-group">
-          <label for="bpm-input">BPM:</label>
-          <input type="number" id="bpm-input" min="1">
+        <div class="status-bar">
+            <p class="status-bar-field" id="status">Waiting for .osz file.</p>
+            <p class="status-bar-field" id="status">v0.2</p>
         </div>
-      </div>
     </div>
-    <div class="panel">
-      <h2>2. Output Configuration</h2>
-      <div class="form-group">
-        <label for="fish-name-input">Fish Name (for .fishchart file):</label>
-        <input type="text" id="fish-name-input" placeholder="e.g. My Awesome Fish">
-      </div>
-      <div class="form-group">
-        <label for="tension-multiplier-select">Fish Tension Multiplier:</label>
-        <select id="tension-multiplier-select">
-          <option value="1.0" selected="selected">1.0 (Default)</option>
-          <option value="0.9">0.9</option>
-          <option value="0.8">0.8</option>
-          <option value="0.7">0.7</option>
-          <option value="0.6">0.6</option>
-          <option value="0.5">0.5</option>
-          <option value="0.4">0.4</option>
-          <option value="0.3">0.3</option>
-          <option value="0.2">0.2</option>
-          <option value="0.1">0.1</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="fish-model-select">Select Fish:</label>
-        <select id="fish-model-select">
-          <option value="" selected="selected">-- No Model --</option>
-          <option value="angelic_fish.tres">Angel Fish</option>
-          <option value="coal_fish_data.tres">Coal Fish</option>
-          <option value="petals_fish_data.tres">Petal Fish</option>
-          <option value="Cool_perch.tres">Cool Perch</option>
-          <option value="great_cat_fish_data.tres">Great Catfish</option>
-          <option value="horned_bass.tres">Horned Bass</option>
-          <option value="kettle_fish_data.tres">Kettle Fish</option>
-          <option value="lake_small_fish_data.tres">Lake1</option>
-          <option value="lake_small_fish_2_data.tres">Lake2</option>
-          <option value="lake_small_fish_3_data.tres">Lake3</option>
-          <option value="lotus_carp_fish_data.tres">Lotus Carpfish</option>
-          <option value="mineral_fish.tres">Mineral Fish</option>
-          <option value="rock_fish.tres">Rock Fish</option>
-          <option value="star_lily_fish_data.tres">Star Lilyfish</option>
-        </select>
-      </div>
-      <button id="convert-btn" disabled="disabled">Convert &amp; Download</button>
-    </div>
-  </div>
-  <div id="status">Ready to start. Please provide an .osz file.</div>
-  <div id="model-container" class="hidden">
-    <model-viewer id="fish-viewer" src="" camera-controls="" auto-rotate="" ar="" shadow-intensity="1"
-      ar-status="not-presenting"></model-viewer>
-  </div>
-</body>
+</div>
+<script src="win7.js"></script>
 <script src="main.js"></script>
-</html>
+<script>
+    $("#mainwindow").draggable({
+        handle: ".title-bar",
+        scroll: false
+    })
+    function link1click() {
+        window.open("https://github.com/dunsparce9/circles-to-fish-static", '_blank').focus();
+    }
+    function link2click() {
+        window.open("https://discord.gg/D9ASJv7P", '_blank').focus();
+    }
+</script>
