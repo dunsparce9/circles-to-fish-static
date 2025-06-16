@@ -26,8 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 floor = Math.min(floor, r.top);
             }
         });
-        const newTop = floor - areaRect.top - winRect.height;
-        win.style.top = newTop + 'px';
+         const target = floor - areaRect.top - winRect.height;
+        let current = parseFloat(win.style.top);
+        if (isNaN(current)) current = target;
+        let velocity = 0;
+        function step() {
+            velocity += 1; // acceleration per frame
+            current += velocity;
+            if (current >= target) {
+                win.style.top = target + 'px';
+            } else {
+                win.style.top = current + 'px';
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
     }
 
     btn.addEventListener('click', () => {
