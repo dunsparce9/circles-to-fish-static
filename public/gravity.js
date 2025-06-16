@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!btn) return;
     const area = document.getElementById('window-area');
     let gravityMode = false;
+    const rafMap = new Map();
 
     function convertToAbsolute() {
         const bounds = area.getBoundingClientRect();
@@ -30,17 +31,27 @@ document.addEventListener('DOMContentLoaded', () => {
         let current = parseFloat(win.style.top);
         if (isNaN(current)) current = target;
         let velocity = 0;
+        if (rafMap.has(win)) {
+            cancelAnimationFrame(rafMap.get(win));
+        }
         function step() {
             velocity += 1; // acceleration per frame
             current += velocity;
             if (current >= target) {
                 win.style.top = target + 'px';
+                rafMap.delete(win);
             } else {
                 win.style.top = current + 'px';
-                requestAnimationFrame(step);
+                const id = requestAnimationFrame(step);
+                rafMap.set(win, id);
             }
         }
-        requestAnimationFrame(step);
+        const id = requestAnimationFrame(step);
+        rafMap.set(win, id);
+    }
+
+    function applyGravityAll() {
+        document.querySelectorAll('.window:not(.hidden)').forEach(w => applyGravity(w));
     }
 
     btn.addEventListener('click', () => {
@@ -48,8 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = gravityMode ? 'Gravity off' : 'Gravity on';
         if (gravityMode) {
             convertToAbsolute();
+            applyGravityAll();
             $(".window").draggable('option', 'stop', function (event, ui) {
-                if (gravityMode) applyGravity(event.target);
+                if (gravityMode) applyGravityAll();
             });
         } else {
             $(".window").draggable('option', 'stop', null);
