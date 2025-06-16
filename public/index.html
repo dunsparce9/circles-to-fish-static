@@ -125,6 +125,29 @@
             <p class="status-bar-field" id="status">v1.0</p>
         </div>
     </div>
+
+    <div class="window active is-bright hidden" id="dialog-failed">
+        <div class="title-bar">
+            <div class="title-bar-text">osu! to Sinker Sound</div>
+            <div class="title-bar-controls">
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="window-body has-space">
+            <h2 class="instruction instruction-primary">Conversion failed :'(</h2>
+            <p>
+                Please contact devs (Discord @spiritchain/@tozworth) with the log file.
+                <br>
+                Note that the converter currently only supports a single timing point (uniform BPM)
+                <br>
+                and cannot convert maps made for osu!catch, taiko, or mania.
+            </p>
+        </div>
+        <footer style="text-align: right">
+            <button onclick="copylog()">Copy logs</button>
+            <button aria-label="Close">OK</button>
+        </footer>
+    </div>
     <div class="window hidden" id="logwindow">
         <div class="title-bar">
             <div class="title-bar-text">Logs (for debugging)</div>
@@ -138,64 +161,5 @@
     </div>
 </div>
 <script src="win7.js"></script>
-<script src="main.js"></script>
-<script>
-    $("#mainwindow").draggable({
-        handle: ".title-bar",
-        scroll: false
-    })
-    $("#logwindow").draggable({
-        handle: ".title-bar",
-        scroll: false
-    })
-    function link1click() {
-        window.open("https://github.com/dunsparce9/circles-to-fish-static", '_blank').focus();
-    }
-    function link2click() {
-        window.open("https://discord.gg/D9ASJv7P", '_blank').focus();
-    }
-
-    function showlogs() {
-        const logWin = document.getElementById('logwindow');
-        logWin.classList.remove('hidden');
-        logWin.classList.add('opening');
-        logWin.addEventListener('animationend', () => {
-            logWin.classList.remove('opening');
-        }, { once: true });
-        allWindows.forEach(w => w.classList.remove('active'));
-        logWin.classList.add('active');
-        highestZ += 1;
-        logWin.style.zIndex = highestZ;
-    }
-
-    function closeWindow(el) {
-        const win = el.closest('.window');
-        win.classList.add('closing');
-        win.addEventListener('animationend', () => { win.classList.add('hidden'); win.classList.remove('closing') }, { once: true });
-    }
-    document.addEventListener('click', e => {
-        if (e.target.matches('.title-bar-controls button[aria-label="Close"]')) {
-            closeWindow(e.target);
-        }
-    });
-    document.addEventListener('DOMContentLoaded', () => {
-        const win = document.getElementById('mainwindow');
-        win.classList.add('opening');
-        win.addEventListener('animationend', () => {
-            win.classList.remove('opening');
-        }, { once: true });
-    });
-    // main.js
-    let highestZ = 1;
-    const allWindows = document.querySelectorAll('.window');
-
-    allWindows.forEach(win => {
-        win.addEventListener('mousedown', () => {
-            allWindows.forEach(w => w.classList.remove('active'));
-            win.classList.add('active');
-            highestZ += 1;
-            win.style.zIndex = highestZ;
-        });
-    });
-
-</script>
+<script src="converter.js"></script>
+<script src="ui.js"></script>

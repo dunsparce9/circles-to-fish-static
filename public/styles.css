@@ -90,3 +90,12 @@ input {
 .title-bar {
     user-select: none;
 }
+
+#dialog-failed {
+    --window-background-color: #ff4848;
+    height: 210px; 
+}
+
+#dialog-failed .window-body {
+    height: 120px;
+}

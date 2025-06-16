@@ -24,7 +24,10 @@
     function updateStatus(message, type = 'info') {
         statusDiv.textContent = message;
         statusDiv.style.color = 'var(--text-color)';
-        if (type === 'error') statusDiv.style.color = 'var(--error-color)';
+        if (type === 'error') {
+            statusDiv.style.color = 'var(--error-color)';
+            openfaildialog();
+        }
         if (type === 'success') statusDiv.style.color = 'var(--success-color)';
         logDiv.textContent += message + "\n";
     }
