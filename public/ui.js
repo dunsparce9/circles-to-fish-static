@@ -17,6 +17,8 @@ function showlogs() {
 function openfaildialog() {
     const failWin = document.getElementById('dialog-failed');
     openWindow(failWin);
+    var audio = new Audio('sounds/critical.wav');
+    audio.play();
 }
 
 function openWindow(window) {

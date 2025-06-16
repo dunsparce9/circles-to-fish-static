@@ -257,6 +257,8 @@
             document.body.removeChild(downloadLink);
             URL.revokeObjectURL(downloadLink.href);
             updateStatus('Successfully created ' + fishName + '.zip!', 'success');
+            var audio = new Audio('sounds/info.wav');
+            audio.play();
         } catch (error) {
             console.error(error);
             updateStatus(`Error: ${error.message}`, 'error');
