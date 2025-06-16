@@ -1,8 +1,4 @@
-$("#mainwindow").draggable({
-    handle: ".title-bar",
-    scroll: false
-})
-$("#logwindow").draggable({
+$(".window").draggable({
     handle: ".title-bar",
     scroll: false
 })
