@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btn.addEventListener('click', () => {
         gravityMode = !gravityMode;
-        btn.textContent = gravityMode ? 'Stop gravity' : 'Gravity mode';
+        btn.textContent = gravityMode ? 'Gravity off' : 'Gravity on';
         if (gravityMode) {
             convertToAbsolute();
             $(".window").draggable('option', 'stop', function (event, ui) {
