@@ -19,7 +19,7 @@
         <div class="title-bar">
             <div class="title-bar-text">osu! to Sinker Sound</div>
             <div class="title-bar-controls">
-                <button aria-label="Close" onclick="this.closest('.window').remove()"></button>
+                <button aria-label="Close"></button>
             </div>
         </div>
         <div class="window-body has-space">
@@ -38,7 +38,7 @@
                         <select id="difficulty-select">
                         </select>
                         <label for="bpm-input">BPM</label>
-                        <input id="bpm-input" type="text"/>
+                        <input id="bpm-input" type="text" />
                     </div>
                 </fieldset>
                 <fieldset>
@@ -137,4 +137,15 @@
     function link2click() {
         window.open("https://discord.gg/D9ASJv7P", '_blank').focus();
     }
+        function closeWindow(el) {
+            const win = el.closest('.window');
+            win.classList.add('closing');
+            win.addEventListener('animationend', () => win.remove(), { once: true });
+        }
+
+        document.addEventListener('click', e => {
+            if (e.target.matches('.title-bar-controls button[aria-label="Close"]')) {
+                closeWindow(e.target);
+            }
+        });
 </script>

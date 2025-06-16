@@ -9,7 +9,7 @@ body {
     align-items: center;
     width: 98vw;
     height: 98vh;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 #mainwindow {
@@ -17,9 +17,31 @@ body {
     --window-background-color: #45a5af;
 }
 
-#bpm-input { width: 50px; }
-#tension-multiplier-select {width: 50px}
+#bpm-input {
+    width: 50px;
+}
+
+#tension-multiplier-select {
+    width: 50px
+}
+
 input {
     font: var(--font);
     max-width: 250px;
+}
+
+@keyframes closeAnim {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.window.closing {
+    animation: closeAnim 0.25s ease-in-out forwards;
 }
