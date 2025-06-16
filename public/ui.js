@@ -2,6 +2,8 @@ $(".window").draggable({
     handle: ".title-bar",
     scroll: false
 })
+const taskbar = document.getElementById('taskbar');
+const taskbarMap = new Map();
 function link1click() {
     window.open("https://github.com/dunsparce9/circles-to-fish-static", '_blank').focus();
 }
@@ -23,14 +25,13 @@ function openfaildialog() {
 
 function openWindow(window) {
     window.classList.remove('hidden');
+    window.classList.remove('minimized');
     window.classList.add('opening');
     window.addEventListener('animationend', () => {
         window.classList.remove('opening');
     }, { once: true });
-    allWindows.forEach(w => w.classList.remove('active'));
-    window.classList.add('active');
-    highestZ += 1;
-    window.style.zIndex = highestZ;
+    markActive(window);
+    ensureTaskbarItem(window);
 }
 
 function closeWindow(win) {
@@ -39,7 +40,11 @@ function closeWindow(win) {
         return;
     }
     win.classList.add('closing');
-    win.addEventListener('animationend', () => { win.classList.add('hidden'); win.classList.remove('closing') }, { once: true });
+    win.addEventListener('animationend', () => { 
+        win.classList.add('hidden'); 
+        win.classList.remove('closing'); 
+        removeTaskbarItem(win);
+    }, { once: true });
 }
 
 document.addEventListener('click', e => {
@@ -55,17 +60,55 @@ document.addEventListener('DOMContentLoaded', () => {
     win.addEventListener('animationend', () => {
         win.classList.remove('opening');
     }, { once: true });
+    ensureTaskbarItem(win);
+    markActive(win);
 });
 
 let highestZ = 1;
 const allWindows = document.querySelectorAll('.window');
 
+function markActive(win) {
+    allWindows.forEach(w => w.classList.remove('active'));
+    document.querySelectorAll('.taskbar-item').forEach(i => i.classList.remove('active'));
+    win.classList.add('active');
+    const item = taskbarMap.get(win);
+    if (item) item.classList.add('active');
+    highestZ += 1;
+    win.style.zIndex = highestZ;
+}
+
+function ensureTaskbarItem(win) {
+    if (taskbarMap.has(win)) return;
+    const item = document.createElement('div');
+    item.className = 'taskbar-item';
+    const title = win.querySelector('.title-bar-text').textContent;
+    item.innerHTML = `<span class="material-symbols-outlined">window</span><span class="title">${title}</span>`;
+    item.addEventListener('click', () => {
+        if (win.classList.contains('hidden')) {
+            openWindow(win);
+        } else {
+            win.classList.add('hidden');
+            item.classList.remove('active');
+        }
+    });
+    item.addEventListener('auxclick', (e) => {
+        if (e.button === 1) {
+            closeWindow(win);
+        }
+    });
+    taskbar.appendChild(item);
+    taskbarMap.set(win, item);
+}
+
+function removeTaskbarItem(win) {
+    const item = taskbarMap.get(win);
+    if (item) item.remove();
+    taskbarMap.delete(win);
+}
+
 allWindows.forEach(win => {
     win.addEventListener('mousedown', () => {
-        allWindows.forEach(w => w.classList.remove('active'));
-        win.classList.add('active');
-        highestZ += 1;
-        win.style.zIndex = highestZ;
+        markActive(win);
     });
 });
 
