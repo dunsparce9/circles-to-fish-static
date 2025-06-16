@@ -45,3 +45,7 @@ input {
 .window.closing {
     animation: closeAnim 0.25s ease-in-out forwards;
 }
+
+.hidden {
+    display: none;
+}
