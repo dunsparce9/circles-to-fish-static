@@ -93,16 +93,57 @@ input {
     user-select: none;
 }
 
-#dialog-failed {
+#dialog-failed{
+    position: fixed;
     --window-background-color: #ff4848;
     height: 210px;
+}
+
+#dialog-logo{
+    position: fixed;
+    --window-background-color: #ff4848;
+    height: 160px;
 }
 
 #dialog-failed .window-body {
     height: 120px;
 }
 
+#dialog-logo .window-body {
+    --window-background-color: #ff4848;
+    height: 70px;
+}
+
+#dialog-justafish {
+    position: fixed;
+    width: 590px;
+    height: 360px;
+}
+
+#dialog-justafish .window-body {
+    width: 570px;
+    height: 320px;
+}
+
 .status-bar-field {
     max-height: 15px;
     overflow: hidden;
+}
+
+#logo-window {
+    position: fixed;
+    width: 158px;
+    height: 168px;
+    top: 10px;
+    left: 10px;
+}
+
+#logo-window .window-body {
+    width: 130px;
+    height: 120px;
+}
+
+#logo-window img {
+    width: 120px;
+    height: 120px;
 }

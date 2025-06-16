@@ -15,10 +15,10 @@ function showlogs() {
 }
 
 function openfaildialog() {
-    const failWin = document.getElementById('dialog-failed');
-    openWindow(failWin);
     var audio = new Audio('sounds/critical.wav');
     audio.play();
+    const failWin = document.getElementById('dialog-failed');
+    openWindow(failWin);
 }
 
 function openWindow(window) {
@@ -34,13 +34,17 @@ function openWindow(window) {
 }
 
 function closeWindow(win) {
+    if (win.id == "logo-window") {
+        logoerror();
+        return;
+    }
     win.classList.add('closing');
     win.addEventListener('animationend', () => { win.classList.add('hidden'); win.classList.remove('closing') }, { once: true });
 }
 
 document.addEventListener('click', e => {
     if (e.target.matches('[aria-label="Close"]')) {
-    const win = e.target.closest('.window');
+        const win = e.target.closest('.window');
         closeWindow(win);
     }
 });
@@ -68,4 +72,17 @@ allWindows.forEach(win => {
 function copylog() {
     navigator.clipboard.writeText(document.getElementById('logarea').textContent);
     closeWindow(document.getElementById('dialog-failed'));
+}
+
+function logoerror() {
+    var audio = new Audio('sounds/critical.wav');
+    audio.play();
+    const failWin = document.getElementById('dialog-logo');
+    openWindow(failWin);
+}
+
+function learnmore() {
+    document.getElementById("fish-body").innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/1goAp0XmhZQ?si=-ulNzP7rVx2_-x7g&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+    const fishWin = document.getElementById('dialog-justafish');
+    openWindow(fishWin);
 }
