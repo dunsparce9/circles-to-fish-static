@@ -13,8 +13,12 @@ body {
 }
 
 #mainwindow {
-    max-width: 350px;
+width: 350px; 
+  height: 390px;  
     --window-background-color: #45a5af;
+}
+.window-body {
+  height: 320px;
 }
 
 #bpm-input {
