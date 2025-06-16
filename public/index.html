@@ -153,13 +153,22 @@
     function link2click() {
         window.open("https://discord.gg/D9ASJv7P", '_blank').focus();
     }
+
     function showlogs() {
-        document.getElementById('logwindow').classList.remove('hidden');
+        const logWin = document.getElementById('logwindow');
+        logWin.classList.remove('hidden');
+        logWin.classList.add('opening');
+        logWin.addEventListener('animationend', () => {
+            logWin.classList.remove('opening');
+        }, { once: true });
+        allWindows.forEach(w => w.classList.remove('active'));
+        logWin.classList.add('active');
     }
+
     function closeWindow(el) {
         const win = el.closest('.window');
         win.classList.add('closing');
-        win.addEventListener('animationend', () => win.remove(), { once: true });
+        win.addEventListener('animationend', () => { win.classList.add('hidden'); win.classList.remove('closing') }, { once: true });
     }
     document.addEventListener('click', e => {
         if (e.target.matches('.title-bar-controls button[aria-label="Close"]')) {
@@ -173,4 +182,17 @@
             win.classList.remove('opening');
         }, { once: true });
     });
+    // main.js
+    let highestZ = 1;
+    const allWindows = document.querySelectorAll('.window');
+
+    allWindows.forEach(win => {
+        win.addEventListener('mousedown', () => {
+            allWindows.forEach(w => w.classList.remove('active'));
+            win.classList.add('active');
+            highestZ += 1;
+            win.style.zIndex = highestZ;
+        });
+    });
+
 </script>
