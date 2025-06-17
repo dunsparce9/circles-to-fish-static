@@ -12,7 +12,7 @@ body {
     overflow: hidden;
 }
 
-#mainwindow {
+#main-window {
     position: fixed;
     z-index: 1;
     width: 350px;
@@ -20,7 +20,7 @@ body {
     --window-background-color: #45a5af;
 }
 
-#logwindow {
+#log-window {
     position: fixed;
     right: 10px;
     bottom: 20px;

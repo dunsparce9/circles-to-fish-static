@@ -12,7 +12,7 @@ function link2click() {
 }
 
 function showlogs() {
-    const logWin = document.getElementById('logwindow');
+    const logWin = document.getElementById('log-window');
     openWindow(logWin);
 }
 
@@ -30,8 +30,8 @@ function openWindow(window) {
     window.addEventListener('animationend', () => {
         window.classList.remove('opening');
     }, { once: true });
-    markActive(window);
     ensureTaskbarItem(window);
+    markActive(window);
 }
 
 function closeWindow(win) {
@@ -55,14 +55,18 @@ document.addEventListener('click', e => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const win = document.getElementById('mainwindow');
+    openBuiltinWindow(document.getElementById('main-window'));
+    openBuiltinWindow(document.getElementById('log-window'));
+});
+
+function openBuiltinWindow(win) {
     win.classList.add('opening');
     win.addEventListener('animationend', () => {
         win.classList.remove('opening');
     }, { once: true });
     ensureTaskbarItem(win);
     markActive(win);
-});
+}
 
 let highestZ = 1;
 const allWindows = document.querySelectorAll('.window');
