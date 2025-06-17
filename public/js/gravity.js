@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+export function initGravity() {
     const btn = document.getElementById('gravity-btn');
     if (!btn) return;
     const area = document.getElementById('window-area');
@@ -67,4 +67,4 @@ document.addEventListener('DOMContentLoaded', () => {
             $(".window").draggable('option', 'stop', null);
         }
     });
-});
+}

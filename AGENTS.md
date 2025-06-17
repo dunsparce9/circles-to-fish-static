@@ -10,10 +10,8 @@ This repository hosts a small static web application that converts osu! beatmaps
 ## Repository Layout
 - `public/` contains all static assets used for hosting the app.
   - `index.html` – main HTML page.
-  - `converter.js` – core logic for parsing beatmaps, generating chart data and converting audio via WebAssembly FFmpeg.
-  - `ui.js` - Main UI file that handles jQuery UI draggable logic, window stacking, and closing functionalities
-  - `dvd.js`, `gravity.js` - Easter eggs (Bouncing DVD screensaver, and gravity for windows)
-  - `styles.css` – additional styling layered over 7.css.
+  - `js/` – JavaScript modules including `converter.js`, `ui.js`, `dvd.js`, `gravity.js` and `win7.js`
+  - `css/styles.css` – additional styling layered over 7.css.
   - `tres/` – fish model files referenced by the converter.
   - `legacy/` – a preserved older version of the converter.
 - `firebase.json` configures Firebase Hosting for deploying the `public` folder.
