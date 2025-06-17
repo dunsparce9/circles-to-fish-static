@@ -29,30 +29,6 @@ tabButtons.forEach((tabButton) =>
     tabHandler(evt, tabButtons)
   }));
 
-// Tabs > Tabs Template
-const templateTabList = document.querySelector("[aria-label='Tabs Template']");
-const templateTabButtons = templateTabList.querySelectorAll("[role=tab]");
-templateTabButtons.forEach((tabButton) =>
-  tabButton.addEventListener("mousedown", (evt) => {
-    tabHandler(evt, templateTabButtons)
-  }));
-templateTabButtons.forEach((tabButton) =>
-  tabButton.addEventListener("focus", (evt) => {
-    tabHandler(evt, templateTabButtons)
-  }));
-
-// Window Body > Window with Tabs
-const windowTabList = document.querySelector("[aria-label='Window with Tabs']");
-const windowTabButtons = windowTabList.querySelectorAll("[role=tab]");
-windowTabButtons.forEach((tabButton) =>
-  tabButton.addEventListener("mousedown", (evt) => {
-    tabHandler(evt, windowTabButtons)
-  }));
-windowTabButtons.forEach((tabButton) =>
-  tabButton.addEventListener("focus", (evt) => {
-    tabHandler(evt, windowTabButtons)
-  }));
-
 
 // Copy code
 document.querySelectorAll(".copy").forEach((button) => {
