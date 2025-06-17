@@ -55,8 +55,8 @@ document.addEventListener('click', e => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    openBuiltinWindow(document.getElementById('main-window'));
     openBuiltinWindow(document.getElementById('log-window'));
+    openBuiltinWindow(document.getElementById('main-window'));
 });
 
 function openBuiltinWindow(win) {
