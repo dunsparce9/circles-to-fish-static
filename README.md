@@ -1,4 +1,4 @@
-# Circles to Fish Static
+# Circles to Fish
 
 This repository contains a simple web application for converting osu! beatmaps into chart bundles for the rhythm game **Sinker Sound**. It is built entirely with static assets and can be opened directly in a browser or served via Firebase Hosting.
 
