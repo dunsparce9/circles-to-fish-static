@@ -90,9 +90,11 @@ function ensureTaskbarItem(win) {
     item.addEventListener('click', () => {
         if (win.classList.contains('hidden')) {
             openWindow(win);
-        } else {
+        } else if (win.classList.contains('active')) {
             win.classList.add('hidden');
             item.classList.remove('active');
+        } else {
+            markActive(win);
         }
     });
     item.addEventListener('auxclick', (e) => {
