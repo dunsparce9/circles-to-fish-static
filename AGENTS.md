@@ -19,3 +19,5 @@ This repository hosts a small static web application that converts osu! beatmaps
 - `firebase.json` configures Firebase Hosting for deploying the `public` folder.
 
 The project has no build step or automated tests. Simply open `public/index.html` in a browser or deploy it with Firebase to use the tool.
+
+There are no other AGENTS.md files in the project.
