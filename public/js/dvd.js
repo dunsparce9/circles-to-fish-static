@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+export function initDvd() {
     let dvdMode = false;
     const btn = document.getElementById('dvd-mode-btn');
     const area = document.getElementById('window-area');
@@ -50,4 +50,4 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelAnimationFrame(rafId);
         }
     });
-});
+}
